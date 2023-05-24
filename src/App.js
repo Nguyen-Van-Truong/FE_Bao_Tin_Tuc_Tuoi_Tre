@@ -1,13 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
-import NewsFeed from './component/NewsFeed';
-import Content from "./component/content";
+import {Outlet} from "react-router-dom";
 
 
 function App() {
     return (
         <div className="App">
-            <Content/>
+            <Outlet></Outlet>
         </div>
     );
 }
