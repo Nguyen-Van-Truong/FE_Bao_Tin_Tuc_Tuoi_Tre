@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './style.css';
 import './bootstrap.min.css';
 import getNewsCategories from "./rssCategories";
+import {parseFeed} from "./NewsFeed";
 function Home() {
     const [categories, setCategories] = useState([]);
+    const [items, setItems] = useState([]);
+    const feedUrl = 'rss/tin-moi-nhat.rss';
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -13,6 +16,15 @@ function Home() {
 
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const newsItems = await parseFeed(feedUrl);
+            setItems(newsItems);
+        };
+
+        fetchData();
+    }, [feedUrl]);
 
     useEffect(() => {
         window.onscroll = function () {
@@ -47,8 +59,8 @@ function Home() {
                 <div className="container">
                     <div className="d-flex menu-items">
                         {categories.map((category, index) => (
-                            <div key={index} className="active">
-                                <a href={`/newsfeed?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
+                            <div key={index} className="">
+                                <a href={`category?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
                                     {category.title}
                                 </a>
                             </div>
@@ -167,21 +179,23 @@ function Home() {
                             <div className="section-title">
                                 <span>Latest Updates</span>
                             </div>
-                            <div className="row mb-3 bb-1 pt-0">
-                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                    <img className="thumb" src="https://letzcricket.com/uploads/news/vGWpKyVU7jHXz5K8.png" alt="Article Thumbnail" />
+                            {items.map((item, index) => (
+                                <div className="row mb-3 bb-1 pt-0">
+                                    <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                        <img className="thumb" src={item.img} alt="Article Thumbnail" />
+                                    </div>
+                                    <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                                        <h5>
+                                            <a href={item.link}>
+                                                {item.title}
+                                            </a>
+                                        </h5>
+                                        <small>{item.pubDate}</small>
+                                        <p className="summary pt-3">{item.description}</p>
+                                    </div>
                                 </div>
-                                <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                                    <h5>
-                                        <a href="detail.html">
-                                            India win series despite Sam Curran's heroics
-                                        </a>
-                                    </h5>
-                                    <small>29th August, 2021</small>
-                                    <p className="summary pt-3">Despite heroic innings from the bat of Sam Curran, India defeated England by 7 runs to win the 3 match series 2-1. Chasing a target of 330 runs to win, the visiting team finished on 322/9 falling short of the target by 7 runs.</p>
-                                </div>
-                            </div>
-                            {/* Repeat the above row divs for other articles */}
+
+                            ))}
                         </div>
                     </div>
 
@@ -201,7 +215,6 @@ function Home() {
                                     </a>
                                 </div>
                             </div>
-                            {/* Repeat the above row divs for other trending articles */}
                         </div>
                     </div>
                 </div>
