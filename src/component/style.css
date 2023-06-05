@@ -110,6 +110,11 @@ small{
 .no-pad{
 	padding-left: 0px!important;
 }
+des-article{
+	direction: ltr;
+	font-size: 28px;
+	font-weight: bold;
+}
 
 
 
