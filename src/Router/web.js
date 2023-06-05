@@ -3,6 +3,8 @@ import App from "../App";
 import Home from "../component/Home";
 import Category from "../component/Category";
 import Detail from "../component/Detail";
+import NewsFeed from "../component/NewsFeed";
+import Content from "../component/content";
 
 export const webRouter = createBrowserRouter([{
     path: '/',
@@ -18,7 +20,12 @@ export const webRouter = createBrowserRouter([{
     }, {
         path: 'detail',
         element: <Detail/>,
+    }, {
+        path: 'newsfeed',
+        element: <NewsFeed/>,
+    }, {
+        path: 'content',
+        element: <Content/>,
     }
-
     ]
 }]);

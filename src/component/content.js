@@ -6,7 +6,7 @@ const Content = () => {
     const [articleContent, setArticleContent] = useState('');
 
     useEffect(() => {
-        const url = 'https://api.allorigins.win/raw?url=https://tuoitre.vn/xe-tai-dam-vao-hang-rao-an-ninh-gan-nha-trang-20230523102332496.htm';
+        const url = 'https://api.allorigins.win/raw?url=https://tuoitre.vn/thu-tuong-uc-moi-tong-bi-thu-nguyen-phu-trong-sang-tham-chinh-thuc-202306041859326.htm';
 
         const getContent = async () => {
             try {

@@ -1,8 +1,19 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import './bootstrap.min.css';
-
+import getNewsCategories from "./rssCategories";
 function Home() {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const fetchedCategories = await getNewsCategories();
+            setCategories(fetchedCategories);
+        };
+
+        fetchCategories();
+    }, []);
+
     useEffect(() => {
         window.onscroll = function () {
             setSticky();
@@ -26,7 +37,7 @@ function Home() {
                 <div className="logo-wrapper d-flex align-items-center">
                     <h1>
                         <a href="index.html">
-                            The News
+                            Báo tuổi trẻ
                         </a>
                     </h1>
                 </div>
@@ -35,33 +46,17 @@ function Home() {
             <div className="container-fluid menu">
                 <div className="container">
                     <div className="d-flex menu-items">
-                        <div className="active">
-                            <a href="index.html">Home</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Health</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Religion</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Technology</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Business</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Politics</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Features</a>
-                        </div>
-                        <div>
-                            <a href="category.html">Interviews</a>
-                        </div>
+                        {categories.map((category, index) => (
+                            <div key={index} className="active">
+                                <a href={`/newsfeed?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
+                                    {category.title}
+                                </a>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
+
 
             <div className="container main-news section">
                 <div className="row">
