@@ -33,7 +33,6 @@ const parseFeed = async (url) => {
         };
     });
 
-    console.log(news);
     return news;
 };
 
@@ -110,3 +109,4 @@ function NewsFeed() {
 
 export default NewsFeed;
 export {parseFeed};
+export {formatPubDate};

@@ -3,19 +3,10 @@ import './style.css';
 import './bootstrap.min.css';
 import getNewsCategories from "./rssCategories";
 import {parseFeed} from "./NewsFeed";
+import Header from "./Header";
 function Home() {
-    const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
     const feedUrl = 'rss/tin-moi-nhat.rss';
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const fetchedCategories = await getNewsCategories();
-            setCategories(fetchedCategories);
-        };
-
-        fetchCategories();
-    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,30 +36,7 @@ function Home() {
 
     return (
         <div>
-            <div className="container">
-                <div className="logo-wrapper d-flex align-items-center">
-                    <h1>
-                        <a href="index.html">
-                            Báo tuổi trẻ
-                        </a>
-                    </h1>
-                </div>
-            </div>
-
-            <div className="container-fluid menu">
-                <div className="container">
-                    <div className="d-flex menu-items">
-                        {categories.map((category, index) => (
-                            <div key={index} className="">
-                                <a href={`category?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
-                                    {category.title}
-                                </a>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
+            <Header/>
 
             <div className="container main-news section">
                 <div className="row">
