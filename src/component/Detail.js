@@ -62,7 +62,7 @@ const Detail = () => {
                         {/*recomend*/}
                         <div className="container section mt-4 no-pad">
                             <div className="section-title">
-                                <span>Recommended</span>
+                                <span>Phổ biến</span>
                             </div>
                             <div className="row">
                                 {worldItems.slice(0, 4).map((item, index) => (

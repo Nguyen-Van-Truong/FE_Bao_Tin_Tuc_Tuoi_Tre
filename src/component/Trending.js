@@ -4,7 +4,7 @@ const Trending = ({items}) => {
     return (
         <div className="trending mt-4">
             <div className="section-title">
-                <span>Trending</span>
+                <span>Xu hướng</span>
             </div>
             {items.map((item, index) => (
                 <div key={index} className="row">
