@@ -1,23 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {parseFeed} from "./NewsFeed";
-import getNewsCategories from "./rssCategories";
+import getNewsCategories from "./RssCategories";
 import Header from "./Header";
+import Trending from "./Trending";
 
 const Category = () => {
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const fetchedCategories = await getNewsCategories();
-            setCategories(fetchedCategories);
-        };
-
-        fetchCategories();
-    }, []);
-
     const [items, setItems] = useState([]);
     const urlParams = new URLSearchParams(window.location.search);
     const feedUrlParam = urlParams.get('feedUrl');
     const feedUrl = feedUrlParam || 'rss/tin-moi-nhat.rss';
+    const [worldEducation, setWorldEducation] = useState([]);
+    const feedUrlEducation = 'rss/giao-duc.rss';
 
     useEffect(() => {
         async function fetchData() {
@@ -27,6 +20,15 @@ const Category = () => {
 
         fetchData();
     }, [feedUrl]);
+
+    useEffect(() => {
+        const fetchWorldData = async () => {
+            const worldEducationsItems = await parseFeed(feedUrlEducation);
+            setWorldEducation(worldEducationsItems);
+        };
+
+        fetchWorldData();
+    }, [feedUrlEducation]);
 
     useEffect(() => {
         window.onscroll = function () {
@@ -47,7 +49,7 @@ const Category = () => {
 
     return (
         <div>
-            <Header categories={categories} />
+            <Header/>
 
             <div className="container main-news">
                 <div className="row">
@@ -55,12 +57,12 @@ const Category = () => {
 
                         <div className="mb-4 mt-4 section">
                             <div className="section-title">
-                                <span>Latest Updates</span>
+                                <span>Cập nhật mới nhất</span>
                             </div>
                             {items.map((item, index) => (
                                 <div className="row mb-3 bb-1 pt-0" key={index}>
                                     <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                        <img className="thumb" src={item.img} alt="Thumb" />
+                                        <img className="thumb" src={item.img} alt="Thumb"/>
                                     </div>
                                     <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
                                         <h5>
@@ -78,23 +80,8 @@ const Category = () => {
 
                     </div>
 
-                        <div className="col-4">
-                        <div className="trending mt-4">
-                            <div className="section-title">
-                                <span>Trending</span>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                    <img className="thumb" src="https://letzcricket.com/uploads/news/Pk9jw3Z9iv8EBLxE.jpg" alt="Trending Thumbnail" />
-                                </div>
-                                <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                                    <a href="detail.html">
-                                        Paras Khadka retires from international cricket
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div className="col-4">
+                        <Trending items={worldEducation.slice(0, 4)} />
                     </div>
 
                 </div>
