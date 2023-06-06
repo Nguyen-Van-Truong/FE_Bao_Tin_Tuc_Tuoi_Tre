@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import getNewsCategories from "./rssCategories";
+import getNewsCategories from "./RssCategories";
+import './style.css';
 
 const Header = () => {
     const [categories, setCategories] = useState([]);
@@ -28,14 +29,17 @@ const Header = () => {
             <div className="container-fluid menu">
                 <div className="container">
                     <div className="d-flex menu-items">
-                        {categories.map((category, index) => (<div key={index} className="">
-                            <a href={`category?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
-                                {category.title}
-                            </a>
-                        </div>))}
+                        {categories.map((category, index) => (
+                            <div key={index} className="">
+                                <a href={`category?feedUrl=${encodeURIComponent(category.rssUrl)}`}>
+                                    {index === 0 ? 'Tin mới nhất' : category.title}
+                                </a>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
+
 
         </div>
     );

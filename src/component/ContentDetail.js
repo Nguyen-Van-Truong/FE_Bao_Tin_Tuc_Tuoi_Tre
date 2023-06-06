@@ -3,7 +3,7 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
 
-const Content = ({url}) => {
+const ContentDetail = ({url}) => {
     const [articleTitle, setArticleTitle] = useState('');
     const [articleDescription, setArticleDescription] = useState('');
     const [articleContent, setArticleContent] = useState('');
@@ -72,4 +72,4 @@ const Content = ({url}) => {
     );
 };
 
-export default Content;
+export default ContentDetail;
