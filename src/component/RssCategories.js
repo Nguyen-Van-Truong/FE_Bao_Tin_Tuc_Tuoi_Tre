@@ -3,6 +3,12 @@ import Parser from 'rss-parser';
 const parser = new Parser();
 const feedUrl = 'https://tuoitre.vn/rss.htm';
 
+// Function to fetch all rssUrls
+const getRssUrls = async () => {
+    const categories = await getNewsCategories();
+    return categories.map(category => category.rssUrl);
+};
+
 const getNewsCategories = async () => {
     const proxyUrl = 'https://api.allorigins.win/raw?url=';
     const response = await fetch(proxyUrl + encodeURIComponent(feedUrl));
@@ -21,4 +27,4 @@ const getNewsCategories = async () => {
     return categories;
 };
 
-export default getNewsCategories;
+export {getNewsCategories, getRssUrls};
