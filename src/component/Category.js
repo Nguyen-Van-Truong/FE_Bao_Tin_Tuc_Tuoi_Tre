@@ -3,49 +3,19 @@ import {parseFeed} from "./NewsFeed";
 import getNewsCategories from "./RssCategories";
 import Header from "./Header";
 import Trending from "./Trending";
+import useNewsItems from "../hooks/UseNewsItems";
+import useStickyNavbar from "../hooks/UseStickyNavbar";
 
 const Category = () => {
-    const [items, setItems] = useState([]);
     const urlParams = new URLSearchParams(window.location.search);
     const feedUrlParam = urlParams.get('feedUrl');
     const feedUrl = feedUrlParam || 'rss/tin-moi-nhat.rss';
-    const [worldEducation, setWorldEducation] = useState([]);
     const feedUrlEducation = 'rss/giao-duc.rss';
 
-    useEffect(() => {
-        async function fetchData() {
-            const news = await parseFeed(feedUrl);
-            setItems(news);
-        }
+    const items = useNewsItems(feedUrl);
+    const worldEducation = useNewsItems(feedUrlEducation);
 
-        fetchData();
-    }, [feedUrl]);
-
-    useEffect(() => {
-        const fetchWorldData = async () => {
-            const worldEducationsItems = await parseFeed(feedUrlEducation);
-            setWorldEducation(worldEducationsItems);
-        };
-
-        fetchWorldData();
-    }, [feedUrlEducation]);
-
-    useEffect(() => {
-        window.onscroll = function () {
-            setSticky();
-        };
-
-        const navbar = document.getElementsByClassName('menu')[0];
-        const sticky = navbar.offsetTop;
-
-        function setSticky() {
-            if (window.pageYOffset >= sticky) {
-                navbar.classList.add('sticky');
-            } else {
-                navbar.classList.remove('sticky');
-            }
-        }
-    }, []);
+    useStickyNavbar();
 
     return (
         <div>
@@ -91,5 +61,3 @@ const Category = () => {
 }
 
 export default Category;
-
-
