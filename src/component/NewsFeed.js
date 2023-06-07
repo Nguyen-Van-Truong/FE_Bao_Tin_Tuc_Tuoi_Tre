@@ -3,7 +3,8 @@ import React, {useEffect, useState} from 'react';
 const parseFeed = async (url) => {
     const MAX_RETRIES = 3; // Số lần thử lại tối đa khi gặp lỗi khi lấy dữ liệu
     const parser = new DOMParser();
-    const proxyUrl = 'https://api.allorigins.win/raw?url=';
+    // const proxyUrl = 'https://api.allorigins.win/raw?url=';
+    const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=';
     const webUrl = 'https://tuoitre.vn/';
 
     let retries = 0; // Biến đếm số lần thử lại

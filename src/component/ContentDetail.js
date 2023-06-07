@@ -25,12 +25,20 @@ const ContentDetail = ({url}) => {
                 setArticleDescription(description);
 
                 // Lấy nội dung bài viết
-                const content = $('.detail-content').html();
-                setArticleContent(content);
+                let content = $('.detail-content').html();
 
                 // Lấy ngày đăng bài viết
                 const publishDate = $('[data-role="publishdate"]').text().trim();
                 setPublishDate(formatPubDate(publishDate));
+
+                // Convert link thẻ a của báo tuổi trẻ về link web hiện tại
+                const content$ = cheerio.load(content);
+                content$('a').each(function () {
+                    const link = content$(this).attr('href');
+                    const newLink = `detail?url=${encodeURIComponent(link)}`;
+                    content$(this).attr('href', newLink);
+                });
+                setArticleContent(content$.html());
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
