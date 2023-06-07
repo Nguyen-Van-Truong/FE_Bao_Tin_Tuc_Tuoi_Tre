@@ -3,7 +3,6 @@ import Parser from 'rss-parser';
 const parser = new Parser();
 const feedUrl = 'https://tuoitre.vn/rss.htm';
 
-// Function to fetch all rssUrls
 const getRssUrls = async () => {
     const categories = await getNewsCategories();
     return categories.map(category => category.rssUrl);
