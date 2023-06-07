@@ -132,13 +132,12 @@ function Home() {
                 ))}
             </Section>
 
-
-
             <Section title="Technology">
                 <Trending items={technologyItems.slice(0, 4)}/>
             </Section>
         </div>
     );
+
 }
 
 export default Home;
