@@ -65,7 +65,7 @@ const ContentDetail = ({url}) => {
                 {articleContent ? (
                     <div dangerouslySetInnerHTML={{__html: articleContent}}/>
                 ) : (
-                    <div>Đang load nội dung...</div>
+                    <div>Đang tải nội dung...</div>
                 )}
             </div>
         </div>
