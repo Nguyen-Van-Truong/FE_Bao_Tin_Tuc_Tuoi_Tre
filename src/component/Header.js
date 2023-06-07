@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import getNewsCategories from "./RssCategories";
-import './style.css';
+import '../styles/style.css';
 
 const Header = () => {
     const [categories, setCategories] = useState([]);
