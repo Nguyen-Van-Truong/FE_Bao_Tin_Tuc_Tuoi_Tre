@@ -10,7 +10,8 @@ import CategoryRow from './CategoryRow';
 const Detail = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const url = 'https://api.allorigins.win/raw?url=' + queryParams.get('url');
+    // const url = 'https://api.allorigins.win/raw?url=' + queryParams.get('url');
+    const url = 'https://api.codetabs.com/v1/proxy?quest=' + queryParams.get('url');
 
     const feedUrlEducation = 'rss/giao-duc.rss';
     const feedUrlWorld = 'rss/the-gioi.rss';
