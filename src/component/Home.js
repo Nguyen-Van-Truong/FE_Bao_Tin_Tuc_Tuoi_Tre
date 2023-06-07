@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/style.css';
 import '../styles/bootstrap.min.css';
-import getNewsCategories from "./RssCategories";
+import {getNewsCategories, getRssUrls} from "./RssCategories";
 import {parseFeed} from "./NewsFeed";
 import Header from "./Header";
 import Trending from "./Trending";
@@ -12,6 +12,7 @@ import MainNews from "./MainNews";
 import CategoryRow from "./CategoryRow";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import useAllNewsItems from "../hooks/UseAllNewsItems";
 library.add(faSearch);
 
 function Home() {
@@ -21,12 +22,25 @@ function Home() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-
     const [categories, setCategories] = React.useState([]);
 
     const items = useNewsItems(feedUrlHome);
     const worldItems = useNewsItems(feedUrlWorld);
     const technologyItems = useNewsItems(feedUrlTechnology);
+    const [rssUrls, setRssUrls] = useState([]);
+
+    useEffect(() => {
+        const fetchUrls = async () => {
+            const urls = await getRssUrls();
+            setRssUrls(urls);
+        };
+
+        fetchUrls();
+    }, []);
+
+    const itemSearchs = useAllNewsItems(rssUrls);
+    console.log(itemSearchs);
+
 
     useStickyNavbar();
 
@@ -41,14 +55,12 @@ function Home() {
 
     // hàm xử lý tìm kiếm để lấy kết quả tìm kiếm từ danh sách tin tức
     const handleSearch = () => {
-        console.log('Từ khóa tìm kiếm:', searchTerm); //Test console
         if (searchTerm === '') {
             setSearchResults([]);
         } else {
-            const results = items.filter(item =>
+            const results = itemSearchs.filter(item =>
                 item.title.toLowerCase().includes(searchTerm.toLowerCase())
             );
-            console.log('Kết quả tìm kiếm:', results);//Test console
             setSearchResults(results);
         }
     };

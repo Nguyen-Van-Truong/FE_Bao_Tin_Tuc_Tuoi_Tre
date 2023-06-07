@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import getNewsCategories from "./RssCategories";
+import {getNewsCategories} from "./RssCategories";
 import '../styles/style.css';
 
 const Header = () => {
