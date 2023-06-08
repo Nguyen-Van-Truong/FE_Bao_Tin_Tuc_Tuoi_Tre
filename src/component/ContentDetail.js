@@ -16,18 +16,18 @@ const ContentDetail = ({url}) => {
                 const html = response.data;
                 const $ = cheerio.load(html);
 
-                // Lấy tiêu đề bài viết
+                // Lấy tiêu đề của bài viết
                 const title = $('.detail-title').text();
                 setArticleTitle(title);
 
-                // Lấy mô tả bài viết
+                // Lấy mô tả của bài viết
                 const description = $('.detail-sapo').text();
                 setArticleDescription(description);
 
-                // Lấy nội dung bài viết
+                // Lấy nội dung của bài viết
                 let content = $('.detail-content').html();
 
-                // Lấy ngày đăng bài viết
+                // Lấy ngày xuất bản của bài viết
                 const publishDate = $('[data-role="publishdate"]').text().trim();
                 setPublishDate(formatPubDate(publishDate));
 
@@ -38,9 +38,15 @@ const ContentDetail = ({url}) => {
                     const newLink = `detail?url=${encodeURIComponent(link)}`;
                     content$(this).attr('href', newLink);
                 });
+
+                // Hạn chế kích thước tối đa của ảnh
+                content$('img').each(function () {
+                    content$(this).css('max-width', '100%');
+                    content$(this).css('height', 'auto');
+                });
                 setArticleContent(content$.html());
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Lỗi khi lấy dữ liệu:', error);
             }
         };
 
@@ -51,7 +57,6 @@ const ContentDetail = ({url}) => {
         <div>
             <h1 style={{
                 fontSize: '36px',
-
             }}>{articleTitle}</h1>
             <small>{publishDate}</small>
 
