@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
+import SettingMenu from "./SettingMenu";
 
 const ContentDetail = ({url}) => {
     const [articleTitle, setArticleTitle] = useState('');
@@ -81,6 +82,7 @@ const ContentDetail = ({url}) => {
                     <div>Đang tải nội dung...</div>
                 )}
             </div>
+            <SettingMenu />
         </div>
     );
 };
