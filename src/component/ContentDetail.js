@@ -3,7 +3,6 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
 import SettingMenu from "./SettingMenu";
-import parse from 'html-react-parser';
 
 
 const ContentDetail = ({url}) => {
@@ -100,7 +99,7 @@ const ContentDetail = ({url}) => {
                     <div>Đang tải nội dung...</div>
                 )}
             </div>
-            <SettingMenu text={audio_text} />
+            <SettingMenu text = {audio_text}/>
         </div>
     );
 };

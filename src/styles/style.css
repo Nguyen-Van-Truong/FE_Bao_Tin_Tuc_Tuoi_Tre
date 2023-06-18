@@ -235,7 +235,11 @@ des-article {
     flex: 1;
 }
 .audio_parameters>label {
-    width: 150px;
+    width: 100px;
+}
+.audio_parameters> span {
+    width: 30px;
+    text-align: right;
 }
 
 .myicon {

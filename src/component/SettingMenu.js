@@ -4,7 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import React, {useRef, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 const SettingComponent = ({text}) => {
     // Import tất cả biểu tượng từ thư viện Solid của Font Awesome
@@ -14,13 +14,11 @@ const SettingComponent = ({text}) => {
     const [isDisplayHidden, setDisplayHidden] = useState(true);
     const [isStart, setStart] = useState(false);
     const [isPause, setPause] = useState(true);
-    const [pitch, setPitch] = useState(null);
-    const [rate, setRate] = useState(null);
-    const [volume, setVolume] = useState(null);
 
-    const pitchRangeRef = useRef(null);
-    const rateRangeRef = useRef(null);
-    const volumeRangeRef = useRef(null);
+
+    const [pitch, setPitch] = useState(1);
+    const [rate, setRate] = useState(1);
+    const [volume, setVolume] = useState(1);
 
     const toggleDiv = () => {
         setMenuHidden(!isMenuHidden);
@@ -30,43 +28,88 @@ const SettingComponent = ({text}) => {
         setAudioHidden(false);
         setDisplayHidden(true);
     };
-
     const hiddenAudio = () => {
         setAudioHidden(true);
         setDisplayHidden(false);
     };
+    // const applay_audioParameter = () => {
+    //     setStart(false);
+    //     setPause(false);
+    //     setPitch(pitchRangeRef.current.value);
+    //     setRate(rateRangeRef.current.value);
+    //     setVolume(volumeRangeRef.current.value);
+    //     setStart(false);
+    //     // eslint-disable-next-line no-undef
+    //     responsiveVoice.pause();
+    //     setPause(true);
+    // };
 
-    const applay_audioParameter = () => {
-        setStart(false);
-        setPause(false);
-        setPitch(pitchRangeRef.current.value);
-        setRate(rateRangeRef.current.value);
-        setVolume(volumeRangeRef.current.value);
-        setStart(false);
-        // eslint-disable-next-line no-undef
-        responsiveVoice.pause();
-        setPause(true);
+
+    useEffect(() => {
+        // Lấy giá trị mặc định từ localStorage (nếu có)
+        const storedPitch = localStorage.getItem('pitch');
+        const storedRate = localStorage.getItem('rate');
+        const storedVolume = localStorage.getItem('volume');
+
+        if (storedPitch) {
+            setPitch(parseFloat(storedPitch));
+        }
+        if (storedRate) {
+            setRate(parseFloat(storedRate));
+        }
+        if (storedVolume) {
+            setVolume(parseFloat(storedVolume));
+        }
+    }, []);
+
+    const handlePitchChange = (event) => {
+        const newPitch = parseFloat(event.target.value);
+        setPitch(newPitch);
+        localStorage.setItem('pitch', newPitch);
+        cancelAudio();
     };
 
-    const speech = () => {
+    const handleRateChange = (event) => {
+        const newRate = parseFloat(event.target.value);
+        setRate(newRate);
+        localStorage.setItem('rate', newRate);
+        cancelAudio();
+    };
+
+    const handleVolumeChange = (event) => {
+        const newVolume = parseFloat(event.target.value);
+        setVolume(newVolume);
+        localStorage.setItem('volume', newVolume);
+        cancelAudio();
+    };
+
+    const cancelAudio = () => {
+        // eslint-disable-next-line no-undef
+        responsiveVoice.cancel();
+        setStart(false);
+        setPause(true);
+    }
+
+    const playAudio = () => {
         if(!isStart){
             // eslint-disable-next-line no-undef
             responsiveVoice.speak(text, 'Vietnamese Female', {
                 pitch: pitch,
                 rate: rate,
                 volume: volume,
-                onstart: ()=>{setStart(true)},
+                onstart: ()=>{setStart(true); setPause(false)},
                 onend: () =>(setStart(false))
             });
         }else{
-            if(isPause){
-                // eslint-disable-next-line no-undef
-                responsiveVoice.resume();
-                setPause(false);
-            }else{
+            // eslint-disable-next-line no-undef
+            if(responsiveVoice.isPlaying()){
                 // eslint-disable-next-line no-undef
                 responsiveVoice.pause();
                 setPause(true);
+            }else{
+                // eslint-disable-next-line no-undef
+                responsiveVoice.resume();
+                setPause(false);
             }
         }
     };
@@ -88,25 +131,28 @@ const SettingComponent = ({text}) => {
                     <div>
                         <div className="audio_parameters">
                             <label htmlFor="pitchRange">Độ cao:</label>
-                            <input type="range" id="pitchRange" min="0" max="2" step="0.1" defaultValue="1" ref={pitchRangeRef}/>
+                            <input type="range" id="pitchRange" min="0.1" max="2" step="0.05" value={pitch}  onChange={handlePitchChange}/>
+                            <span>{pitch}</span> {/* Hiển thị giá trị volume */}
                         </div>
                         <div className="audio_parameters">
                             <label htmlFor="rateRange">Tốc độ:</label>
-                            <input type="range" id="rateRange" min="0.5" max="2" step="0.1" defaultValue="1" ref={rateRangeRef}/>
+                            <input type="range" id="rateRange" min="0.1" max="1.5" step="0.05" value={rate}  onChange={handleRateChange}/>
+                            <span>{rate}</span> {/* Hiển thị giá trị volume */}
                         </div>
                         <div className="audio_parameters">
                             <label htmlFor="volumeRange">Âm lượng:</label>
-                            <input type="range" id="volumeRange" min="0" max="1" step="0.1" defaultValue="1" ref={volumeRangeRef}/>
+                            <input type="range" id="volumeRange" min="0.1" max="1" step="0.05" value={volume} onChange={handleVolumeChange}/>
+                            <span>{volume}</span> {/* Hiển thị giá trị volume */}
                         </div>
                     </div>
-                    <div style={{textAlign: 'left'}}>
-                        <button style={{ padding: '5px 10px', borderRadius: '5px' }} onClick={applay_audioParameter}>
-                            Áp dụng
-                        </button>
-                    </div>
-                    <button id="start" onClick={speech}>
-                        <FontAwesomeIcon icon="fas fa-pause" className={isPause ? 'myicon':'hidden'} />
-                        <FontAwesomeIcon icon="fas fa-play" style={{marginLeft: '6px'}} className={isPause ? 'hidden' : 'myicon'}/>
+                    {/*<div style={{textAlign: 'left'}}>*/}
+                    {/*    <button style={{ padding: '5px 10px', borderRadius: '5px' }} onClick={applay_audioParameter}>*/}
+                    {/*        Áp dụng*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
+                    <button id="start" onClick={playAudio}>
+                        <FontAwesomeIcon icon="fas fa-pause" className={isPause ? 'hidden':'myicon'} />
+                        <FontAwesomeIcon icon="fas fa-play" style={{marginLeft: '6px'}} className={isPause ? 'myicon' : 'hidden'}/>
                     </button>
                 </div>
 
