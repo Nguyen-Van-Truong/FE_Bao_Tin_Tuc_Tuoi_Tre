@@ -157,6 +157,56 @@ des-article {
 .section-title {
     text-align: left;
 }
+/*search*/
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.search-container input {
+    padding: 10px;
+    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-container button:hover {
+    background-color: #45a049;
+}
+/*.micro-icon {*/
+/*    margin-left: 5px;*/
+/*    font-size: 18px;*/
+/*    color: #888;*/
+/*}*/
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.input-container input {
+    padding-right: 30px; /* Để tạo không gian để hiển thị biểu tượng micro */
+}
+
+.input-container .micro-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
 
 
 /*css cho setting menu*/

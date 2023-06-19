@@ -10,9 +10,12 @@ import useStickyNavbar from "../hooks/UseStickyNavbar";
 import Section from "./Section";
 import MainNews from "./MainNews";
 import CategoryRow from "./CategoryRow";
+import { FaMicrophoneAlt } from 'react-icons/fa';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import useAllNewsItems from "../hooks/UseAllNewsItems";
+import {FaHeart} from 'react-icons/fa';
 library.add(faSearch);
 
 function Home() {
@@ -21,6 +24,7 @@ function Home() {
     const feedUrlTechnology = 'rss/cong-nghe.rss';
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [isListening, setIsListening] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [categories, setCategories] = React.useState([]);
 
@@ -28,6 +32,25 @@ function Home() {
     const worldItems = useNewsItems(feedUrlWorld);
     const technologyItems = useNewsItems(feedUrlTechnology);
     const [rssUrls, setRssUrls] = useState([]);
+
+    const [favorites, setFavorites] = useState(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        return savedFavorites ? JSON.parse(savedFavorites) : [];
+    });
+
+    const handleFavoriteClick = (itemLink) => {
+        let newFavorites = [...favorites];
+
+        if (favorites.includes(itemLink)) {
+            newFavorites = newFavorites.filter(favorite => favorite !== itemLink);
+        } else {
+            newFavorites.push(itemLink);
+        }
+
+        setFavorites(newFavorites);
+        localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    };
+
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -65,6 +88,31 @@ function Home() {
         }
     };
 
+    //xử lý icon micro để tìm kiếm bằng giọng nói
+    const handleSpeechRecognition = () => {
+        const recognition = new window.webkitSpeechRecognition();
+
+        recognition.lang = 'vi-VN';
+        recognition.start();
+        setIsListening(true);
+
+        recognition.onresult = (event) => {
+            const result = event.results[0][0].transcript;
+            setSearchTerm(result);
+        };
+
+        recognition.onerror = (event) => {
+            console.log('Error occurred in recognition: ', event.error);
+        };
+    };
+    useEffect(() => {
+        if (isListening) {
+            // Thực hiện tìm kiếm tự động
+            handleSearch();
+            setIsListening(false);
+        }
+    }, [searchTerm]);
+
     return (
         <div>
             <Header/>
@@ -77,12 +125,15 @@ function Home() {
                     <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         {/* Tìm kiếm tin tức */}
                         <div className="search-container">
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm tin tức..."
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                            />
+                            <div className="input-container">
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm tin tức..."
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
+                                />
+                                <FaMicrophoneAlt className="micro-icon" onClick={handleSpeechRecognition} />
+                            </div>
                             <button onClick={handleSearch}>Tìm kiếm</button>
                         </div>
 
@@ -118,10 +169,14 @@ function Home() {
                                         </h5>
                                         <small>{item.pubDate}</small>
                                         <p className="summary pt-3">{item.description}</p>
+                                        <button onClick={() => handleFavoriteClick(item.link)}>
+                                            {favorites.includes(item.link) ? <FaHeart color="red" size={20}/> : <FaHeart size={20}/>}
+                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </Section>
+
                     </div>
 
                     {/* "Trending" section */}
