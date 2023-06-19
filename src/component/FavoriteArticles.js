@@ -61,7 +61,7 @@ const FavoriteArticles = () => {
                     <div className="clear-fav-container" style={{textAlign: 'right'}}>
                         <button onClick={clearFavoriteArticles}>
                             <FaTrash size={20}/>
-                            Clear All
+                            Xóa hết
                         </button>
                     </div>
                     <div className="col-12">
