@@ -5,9 +5,8 @@ import Trending from "./Trending";
 import useNewsItems from "../hooks/UseNewsItems";
 import useStickyNavbar from "../hooks/UseStickyNavbar";
 import CategoryRow from './CategoryRow';
-import React, {useEffect} from "react";
-
-export const MyContext = React.createContext();
+import {MyContext} from "../App";
+import React from "react";
 
 
 const Detail = () => {
@@ -23,41 +22,40 @@ const Detail = () => {
     const worldItems = useNewsItems(feedUrlWorld);
 
     useStickyNavbar();
-    const [backgroundColor, setBackgroundColor] = React.useState('#ffffff')
-    const [textColor, setTextColor] = React.useState('#000000')
 
-    useEffect(() => {
-        let debackgroundColor = localStorage.getItem('backgroundColor');
-        if(debackgroundColor){
-            setBackgroundColor(debackgroundColor);
-            console.log("FFFFF");
-        }
-        let detextColor = localStorage.getItem('textColor');
-        if(detextColor){
-            setTextColor(detextColor);
-        }
-    }, []);
+    const {backgroundColor} = React.useContext(MyContext);
+    const lightColor = calculateLighterColor(backgroundColor);
+    function calculateLighterColor(color) {
+        // Tính toán màu nhạt hơn
+        // Ví dụ: giảm giá trị đỏ, xanh và màu xanh lam của màu gốc
+        const r = parseInt(color.substr(1, 2), 16) * 0.8;
+        const g = parseInt(color.substr(3, 2), 16) * 0.8;
+        const b = parseInt(color.substr(5, 2), 16) * 0.8;
+
+        // Chuyển đổi lại sang chuỗi màu hex
+        return `#${Math.round(r).toString(16)}${Math.round(g).toString(16)}${Math.round(b).toString(16)}`;
+    }
+
+
     return (
-        <div>
+        <div style={{backgroundColor: lightColor}}>
             <Header />
-            <MyContext.Provider value={{backgroundColor, setBackgroundColor, textColor, setTextColor}}>
-                <div className="container main-news">
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="story mt-4">
-                                <ContentDetail url={url} />
-                            </div>
-                            <br />
-                            <hr />
-                            <CategoryRow items={worldItems} title="Phổ biến" />
+            <div className="container main-news">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="story mt-4">
+                            <ContentDetail url={url} />
                         </div>
-                        {/*trending*/}
-                        {/*<div className="col-4">*/}
-                        {/*    <Trending items={educationItems.slice(0, 5)} />*/}
-                        {/*</div>*/}
+                        <br />
+                        <hr />
+                        <CategoryRow items={worldItems} title="Phổ biến" />
                     </div>
+                    {/*trending*/}
+                    {/*<div className="col-4">*/}
+                    {/*    <Trending items={educationItems.slice(0, 5)} />*/}
+                    {/*</div>*/}
                 </div>
-            </MyContext.Provider>
+            </div>
         </div>
     );
 }

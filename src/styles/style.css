@@ -219,7 +219,7 @@ des-article {
     cursor: pointer;
 }
 #setting_menu {
-    height: 360px;
+    height: 450px;
     width: 360px;
     border-radius: 5px;
     border: 5px solid black;
@@ -250,7 +250,7 @@ des-article {
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translate(-50%, -110%);
+    transform: translate(-50%, -150%);
 }
 
 
@@ -278,7 +278,7 @@ des-article {
     display: flex;
     font-size: 18px;
     font-weight: bold;
-    margin: 25px 10px;
+    margin: 35px 10px;
     text-align: left;
 }
 .audio_parameters>input {
@@ -322,7 +322,14 @@ des-article {
     margin-left: 5px;
     margin-top: 10px;
 }
+.align_box {
+    height: 50px;
+    width: 40px;
+}
 
-
+.font-he-box {
+    height: 40px;
+    width: 40px;
+}
 
 

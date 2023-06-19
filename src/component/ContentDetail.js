@@ -4,7 +4,7 @@ import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
 import SettingMenu from "./SettingMenu";
 import {FaHeart} from 'react-icons/fa';
-import {MyContext} from "./Detail";
+import {MyContext} from "../App";
 
 
 const ContentDetail = ({url}) => {
@@ -100,7 +100,9 @@ const ContentDetail = ({url}) => {
         setIsFavorite(!isFavorite);
     };
 
-    const {backgroundColor, textColor} = useContext(MyContext);
+    const {backgroundColor, textColor, textAlign, fontSize, lineHeight} = useContext(MyContext);
+    const minFontSize = fontSize - 6;
+    const maxFontSize = fontSize + 10;
     return (
         <div style={{backgroundColor: backgroundColor,color: textColor ,padding: '20px'}}>
             <button onClick={handleFavoriteClick}>
@@ -108,14 +110,15 @@ const ContentDetail = ({url}) => {
             </button>
 
             <h1 style={{
-                fontSize: '36px',
+                fontSize: maxFontSize,
             }}>{articleTitle}</h1>
             <small>{publishDate}</small>
             <p className="fw-bold"
                style={{
                    direction: 'ltr',
-                   fontSize: '26px',
-                   textAlign: 'left',
+                   fontSize: fontSize,
+                   textAlign: textAlign,
+                   lineHeight: lineHeight,
                }
                }>
                 {articleDescription}
@@ -123,11 +126,13 @@ const ContentDetail = ({url}) => {
             <div
                 style={{
                     direction: 'ltr',
-                    textAlign: 'left',
-                    fontSize: '20px',
+                    textAlign: textAlign,
+                    fontSize: minFontSize,
+                    lineHeight: lineHeight,
+                    backgroundColor: backgroundColor
                 }}>
                 {articleContent ? (
-                    <div dangerouslySetInnerHTML={{__html: articleContent}}/>
+                    <div style={{backgroundColor: backgroundColor}} dangerouslySetInnerHTML={{__html: articleContent}}/>
                 ) : (
                     <div>Đang tải nội dung...</div>
                 )}
