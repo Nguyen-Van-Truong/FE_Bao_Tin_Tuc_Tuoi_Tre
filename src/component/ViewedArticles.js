@@ -7,7 +7,7 @@ const ViewedArticles = () => {
     const [viewedArticles, setViewedArticles] = useState([]);
 
     useEffect(() => {
-        const articles = JSON.parse(localStorage.getItem('viewed') || '[]');
+        const articles = JSON.parse(localStorage.getItem('viewed') || '[]').reverse();
         const fetchedArticles = articles.map(async (url) => {
             try {
                 const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;

@@ -7,7 +7,8 @@ const FavoriteArticles = () => {
     const [favArticles, setFavArticles] = useState([]);
 
     useEffect(() => {
-        const articles = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const articles = JSON.parse(localStorage.getItem('favorites') || '[]').reverse();
+
         const fetchedArticles = articles.map(async (url) => {
             try {
                 const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
