@@ -5,6 +5,8 @@ import Category from "../component/Category";
 import Detail from "../component/Detail";
 import NewsFeed from "../component/NewsFeed";
 import ContentDetail from "../component/ContentDetail";
+import ViewedArticles from "../component/ViewedArticles";
+import FavoriteArticles from "../component/FavoriteArticles";
 
 export const webRouter = createBrowserRouter([{
     path: '/',
@@ -20,6 +22,12 @@ export const webRouter = createBrowserRouter([{
     }, {
         path: 'detail',
         element: <Detail/>,
+    }, {
+        path: 'viewed-articles',
+        element: <ViewedArticles/>,
+    }, {
+        path: 'favorite-articles',
+        element: <FavoriteArticles/>,
     }
     ]
 }]);
