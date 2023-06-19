@@ -1,37 +1,35 @@
 import React, {useEffect, useState} from 'react';
 
 const parseFeed = async (url) => {
-    const MAX_RETRIES = 3; // Số lần thử lại tối đa khi gặp lỗi khi lấy dữ liệu
+    const MAX_RETRIES = 3;
     const parser = new DOMParser();
     // const proxyUrl = 'https://api.allorigins.win/raw?url=';
     const proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=';
     const webUrl = 'https://tuoitre.vn/';
 
-    let retries = 0; // Biến đếm số lần thử lại
-    let success = false; // Biến kiểm tra xem việc lấy dữ liệu có thành công hay không
+    let retries = 0;
+    let success = false;
     let response, text;
 
-    // Tiến hành thử lấy dữ liệu cho đến khi thành công hoặc số lần thử lại đạt tối đa
     while (!success && retries < MAX_RETRIES) {
         try {
-            response = await fetch(proxyUrl + webUrl + encodeURIComponent(url)); // Lấy dữ liệu từ url
-            text = await response.text(); // Chuyển dữ liệu vừa lấy về dạng text
-            success = true; // Nếu không gặp lỗi, đánh dấu là đã lấy dữ liệu thành công
-        } catch (error) { // Nếu gặp lỗi
-            retries += 1; // Tăng số lần thử lại lên 1
+            response = await fetch(proxyUrl + webUrl + encodeURIComponent(url)); // Lay du lieu tu url voi proxy
+            text = await response.text(); // chuyen ve dang text
+            success = true;
+        } catch (error) {
+            retries += 1;
             console.error(`Lần thử ${retries} để lấy dữ liệu từ ${url} thất bại. Đang thử lại...`);
         }
     }
 
-    // Nếu sau số lần thử lại tối đa mà vẫn không lấy được dữ liệu
     if (!success) {
         console.error(`Không lấy được dữ liệu từ ${url} sau ${MAX_RETRIES} lần thử.`);
         return [];
     }
 
-    // Parse dữ liệu dạng text vừa lấy được thành dạng XML
+    // Parse du lieu ve xml
     const xml = parser.parseFromString(text, 'application/xml');
-    // Tìm tất cả các item trong dữ liệu XML
+    // Tim tat ca item trong xml
     const items = xml.querySelectorAll('item');
 
     const news = Array.from(items).map((item) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {getNewsCategories} from "./RssCategories";
 import '../styles/style.css';
 
@@ -36,11 +36,15 @@ const Header = () => {
                                 </a>
                             </div>
                         ))}
+                        <div className="">
+                            <a href="/favorite-articles">Tin yêu thích</a>
+                        </div>
+                        <div className="">
+                            <a href="/viewed-articles">Tin đã xem</a>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     );
 };
