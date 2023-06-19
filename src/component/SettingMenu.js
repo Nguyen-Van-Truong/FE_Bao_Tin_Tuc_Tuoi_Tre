@@ -5,11 +5,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import React, {useState, useEffect, useContext} from 'react';
-import {MyContext} from "./Detail";
-import contentDetail from "./ContentDetail";
+import {MyContext} from "../App";
 
 const backgroundColors = [
-    '#000000', // Đỏ
+    '#343434', // Đen
+    '#d0d0d0', // Trắng
     '#d04141', // Đỏ
     '#329632', // Xanh lá cây
     '#7c7cd5', // Xanh dương
@@ -20,14 +20,15 @@ const backgroundColors = [
     '#b936b9', // Tím
 ];
 const textColors = [
-    '#ffffff', // Đỏ
+    '#000000', // Đen
+    '#d0d0d0', // Trắng
     '#b00000', // Đỏ
     '#00be00', // Xanh lá cây
     '#00009d', // Xanh dương
     '#777700', // Vàng
     '#ff00ff', // Hồng
     '#00ffff', // Lam
-    '#ff1b1b', // Cam
+    '#ffb400', // Cam
     '#ff00ff', // Tím
 ];
 // Import tất cả biểu tượng từ thư viện Solid của Font Awesome
@@ -142,7 +143,7 @@ const SettingComponent = ({text}) => {
             ></div>
         );
     };
-    const {setBackgroundColor, setTextColor} = useContext(MyContext);
+    const {setBackgroundColor, setTextColor, setTextAlign, fontSize ,setFontSize, lineHeight ,setLineHeight} = useContext(MyContext);
 
 
     // Hàm này được gọi khi người dùng bấm vào một ô
@@ -154,6 +155,21 @@ const SettingComponent = ({text}) => {
     const selectedTextColor = (color) => {
         setTextColor(color);
         localStorage.setItem('textColor', color)
+    };
+
+    const selectedTextAlign = (option) => {
+        setTextAlign(option);
+        localStorage.setItem('textAlign', option);
+    };
+
+    const selectFontSize = (event) => {
+        setFontSize(parseInt(event.target.value));
+        localStorage.setItem('fontSize', event.target.value);
+    };
+
+    const selectLineSpacing = (event) => {
+        setLineHeight(parseInt(event.target.value));
+        localStorage.setItem('lineHeight',event.target.value);
     };
 
 
@@ -218,6 +234,29 @@ const SettingComponent = ({text}) => {
                             ))}
                         </div>
                     </div>
+                    <div>
+                        <div className='labelPanel_color' >Chọn canh lề</div>
+                        <div className='panel_color' style={{marginTop: '20px'}}>
+                            <button className='align_box' onClick={() => selectedTextAlign('left')}><FontAwesomeIcon icon="fas fa-align-left" className='myicon' /></button>
+                            <button className='align_box' onClick={() => selectedTextAlign('center')}><FontAwesomeIcon icon="fas fa-align-center" className='myicon' /></button>
+                            <button className='align_box' onClick={() => selectedTextAlign('right')}><FontAwesomeIcon icon="fas fa-align-right" className='myicon' /></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='labelPanel_color' >Chọn cỡ chữ và giản cách</div>
+                        <div className='panel_color' style={{marginTop: '20px'}}>
+                            <div>
+                                <label style={{fontWeight:"bold", fontSize: '20px', marginRight: '10px'}}>Cỡ chữ: </label>
+                                <input className='font-he-box' type="number" value={fontSize} min={0} onChange={selectFontSize} />
+                            </div>
+                            <div>
+                                <label style={{fontWeight:"bold", fontSize: '20px', marginRight: '10px'}}>Dãn dòng: </label>
+                                <input className='font-he-box' type="number" value={lineHeight} min={1}   onChange={selectLineSpacing} />
+                            </div>
+                        </div>
+                    </div>
+
 
 
 
