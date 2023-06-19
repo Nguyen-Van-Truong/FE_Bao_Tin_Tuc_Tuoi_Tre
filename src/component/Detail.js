@@ -1,4 +1,3 @@
-import React from 'react';
 import ContentDetail from "./ContentDetail";
 import Header from "./Header";
 import { useLocation } from "react-router-dom";
@@ -6,6 +5,9 @@ import Trending from "./Trending";
 import useNewsItems from "../hooks/UseNewsItems";
 import useStickyNavbar from "../hooks/UseStickyNavbar";
 import CategoryRow from './CategoryRow';
+import {MyContext} from "../App";
+import React from "react";
+
 
 const Detail = () => {
     const location = useLocation();
@@ -21,10 +23,23 @@ const Detail = () => {
 
     useStickyNavbar();
 
-    return (
-        <div>
-            <Header />
+    const {backgroundColor} = React.useContext(MyContext);
+    const lightColor = calculateLighterColor(backgroundColor);
+    function calculateLighterColor(color) {
+        // Tính toán màu nhạt hơn
+        // Ví dụ: giảm giá trị đỏ, xanh và màu xanh lam của màu gốc
+        const r = parseInt(color.substr(1, 2), 16) * 0.8;
+        const g = parseInt(color.substr(3, 2), 16) * 0.8;
+        const b = parseInt(color.substr(5, 2), 16) * 0.8;
 
+        // Chuyển đổi lại sang chuỗi màu hex
+        return `#${Math.round(r).toString(16)}${Math.round(g).toString(16)}${Math.round(b).toString(16)}`;
+    }
+
+
+    return (
+        <div style={{backgroundColor: lightColor}}>
+            <Header />
             <div className="container main-news">
                 <div className="row">
                     <div className="col-12">

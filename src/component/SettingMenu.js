@@ -4,11 +4,41 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {MyContext} from "../App";
+
+const backgroundColors = [
+    '#343434', // Đen
+    '#d0d0d0', // Trắng
+    '#d04141', // Đỏ
+    '#329632', // Xanh lá cây
+    '#7c7cd5', // Xanh dương
+    '#a2a22f', // Vàng
+    '#9a459a', // Hồng
+    '#268d8d', // Lam
+    '#987338', // Cam
+    '#b936b9', // Tím
+];
+const textColors = [
+    '#000000', // Đen
+    '#d0d0d0', // Trắng
+    '#b00000', // Đỏ
+    '#00be00', // Xanh lá cây
+    '#00009d', // Xanh dương
+    '#777700', // Vàng
+    '#ff00ff', // Hồng
+    '#00ffff', // Lam
+    '#ffb400', // Cam
+    '#ff00ff', // Tím
+];
+// Import tất cả biểu tượng từ thư viện Solid của Font Awesome
+library.add(fas);
+
+
+
 
 const SettingComponent = ({text}) => {
-    // Import tất cả biểu tượng từ thư viện Solid của Font Awesome
-    library.add(fas);
+
     const [isMenuHidden, setMenuHidden] = useState(true);
     const [isAudioHidden, setAudioHidden] = useState(false);
     const [isDisplayHidden, setDisplayHidden] = useState(true);
@@ -23,7 +53,6 @@ const SettingComponent = ({text}) => {
     const toggleDiv = () => {
         setMenuHidden(!isMenuHidden);
     };
-
     const hiddenDisplay = () => {
         setAudioHidden(false);
         setDisplayHidden(true);
@@ -32,18 +61,6 @@ const SettingComponent = ({text}) => {
         setAudioHidden(true);
         setDisplayHidden(false);
     };
-    // const applay_audioParameter = () => {
-    //     setStart(false);
-    //     setPause(false);
-    //     setPitch(pitchRangeRef.current.value);
-    //     setRate(rateRangeRef.current.value);
-    //     setVolume(volumeRangeRef.current.value);
-    //     setStart(false);
-    //     // eslint-disable-next-line no-undef
-    //     responsiveVoice.pause();
-    //     setPause(true);
-    // };
-
 
     useEffect(() => {
         // Lấy giá trị mặc định từ localStorage (nếu có)
@@ -114,6 +131,47 @@ const SettingComponent = ({text}) => {
         }
     };
 
+    /*-------------------------------------------------------------------------------*/
+
+    const Square = ({ color, onClick }) => {
+        return (
+            <div className= 'color_box'
+                style={{
+                    backgroundColor: color,
+                }}
+                onClick={onClick}
+            ></div>
+        );
+    };
+    const {setBackgroundColor, setTextColor, setTextAlign, fontSize ,setFontSize, lineHeight ,setLineHeight} = useContext(MyContext);
+
+
+    // Hàm này được gọi khi người dùng bấm vào một ô
+    const selectedBackgroundColor = (color) => {
+        setBackgroundColor(color);
+        localStorage.setItem('backgroundColor', color);
+
+    };
+    const selectedTextColor = (color) => {
+        setTextColor(color);
+        localStorage.setItem('textColor', color)
+    };
+
+    const selectedTextAlign = (option) => {
+        setTextAlign(option);
+        localStorage.setItem('textAlign', option);
+    };
+
+    const selectFontSize = (event) => {
+        setFontSize(parseInt(event.target.value));
+        localStorage.setItem('fontSize', event.target.value);
+    };
+
+    const selectLineSpacing = (event) => {
+        setLineHeight(parseInt(event.target.value));
+        localStorage.setItem('lineHeight',event.target.value);
+    };
+
 
     return (
         <div className="setting">
@@ -145,19 +203,66 @@ const SettingComponent = ({text}) => {
                             <span>{volume}</span> {/* Hiển thị giá trị volume */}
                         </div>
                     </div>
-                    {/*<div style={{textAlign: 'left'}}>*/}
-                    {/*    <button style={{ padding: '5px 10px', borderRadius: '5px' }} onClick={applay_audioParameter}>*/}
-                    {/*        Áp dụng*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
                     <button id="start" onClick={playAudio}>
                         <FontAwesomeIcon icon="fas fa-pause" className={isPause ? 'hidden':'myicon'} />
                         <FontAwesomeIcon icon="fas fa-play" style={{marginLeft: '6px'}} className={isPause ? 'myicon' : 'hidden'}/>
                     </button>
                 </div>
 
-                <div id="setting_display" className={isDisplayHidden ? 'setting_panel hidden' : 'setting_panel'}>
-                    <p style={{ fontSize: '30px' }}>display</p>
+                <div id="setting_display" className={isDisplayHidden ? 'setting_panel hidden' : 'setting_panel'} style={{padding: '10px'}}>
+                    <div>
+                        <div className='labelPanel_color'>Chọn màu nền</div>
+                        <div className='panel_color'>
+                            {backgroundColors.map((color, index) => (
+                                <Square
+                                    key={index}
+                                    color={color}
+                                    onClick={() => selectedBackgroundColor(color)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <div className='labelPanel_color' >Chọn màu chữ</div>
+                        <div className="panel_color">
+                            {textColors.map((color, index) => (
+                                <Square
+                                    key={index}
+                                    color={color}
+                                    onClick={() => selectedTextColor(color)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <div className='labelPanel_color' >Chọn canh lề</div>
+                        <div className='panel_color' style={{marginTop: '20px'}}>
+                            <button className='align_box' onClick={() => selectedTextAlign('left')}><FontAwesomeIcon icon="fas fa-align-left" className='myicon' /></button>
+                            <button className='align_box' onClick={() => selectedTextAlign('center')}><FontAwesomeIcon icon="fas fa-align-center" className='myicon' /></button>
+                            <button className='align_box' onClick={() => selectedTextAlign('right')}><FontAwesomeIcon icon="fas fa-align-right" className='myicon' /></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='labelPanel_color' >Chọn cỡ chữ và giản cách</div>
+                        <div className='panel_color' style={{marginTop: '20px'}}>
+                            <div>
+                                <label style={{fontWeight:"bold", fontSize: '20px', marginRight: '10px'}}>Cỡ chữ: </label>
+                                <input className='font-he-box' type="number" value={fontSize} min={0} onChange={selectFontSize} />
+                            </div>
+                            <div>
+                                <label style={{fontWeight:"bold", fontSize: '20px', marginRight: '10px'}}>Dãn dòng: </label>
+                                <input className='font-he-box' type="number" value={lineHeight} min={1}   onChange={selectLineSpacing} />
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
                 </div>
             </div>
 
