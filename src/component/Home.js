@@ -13,6 +13,7 @@ import CategoryRow from "./CategoryRow";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import useAllNewsItems from "../hooks/UseAllNewsItems";
+import {FaHeart} from 'react-icons/fa';
 library.add(faSearch);
 
 function Home() {
@@ -28,6 +29,25 @@ function Home() {
     const worldItems = useNewsItems(feedUrlWorld);
     const technologyItems = useNewsItems(feedUrlTechnology);
     const [rssUrls, setRssUrls] = useState([]);
+
+    const [favorites, setFavorites] = useState(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        return savedFavorites ? JSON.parse(savedFavorites) : [];
+    });
+
+    const handleFavoriteClick = (itemLink) => {
+        let newFavorites = [...favorites];
+
+        if (favorites.includes(itemLink)) {
+            newFavorites = newFavorites.filter(favorite => favorite !== itemLink);
+        } else {
+            newFavorites.push(itemLink);
+        }
+
+        setFavorites(newFavorites);
+        localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    };
+
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -118,10 +138,14 @@ function Home() {
                                         </h5>
                                         <small>{item.pubDate}</small>
                                         <p className="summary pt-3">{item.description}</p>
+                                        <button onClick={() => handleFavoriteClick(item.link)}>
+                                            {favorites.includes(item.link) ? <FaHeart color="red" size={20}/> : <FaHeart size={20}/>}
+                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </Section>
+
                     </div>
 
                     {/* "Trending" section */}
