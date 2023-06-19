@@ -297,7 +297,31 @@ des-article {
     height: 90%;
 }
 
+.color_box{
+    height: 20px;
+    width: 30px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 2px solid #d5d5d5;
 
+}
+
+#setting_audio, #setting_display {
+    background-color: white;
+    color: black;
+}
+.panel_color{
+    display: flex;
+    justify-content: space-around;
+}
+.labelPanel_color{
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-top: 10px;
+}
 
 
 

@@ -4,11 +4,40 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {MyContext} from "./Detail";
+import contentDetail from "./ContentDetail";
+
+const backgroundColors = [
+    '#000000', // Đỏ
+    '#d04141', // Đỏ
+    '#329632', // Xanh lá cây
+    '#7c7cd5', // Xanh dương
+    '#a2a22f', // Vàng
+    '#9a459a', // Hồng
+    '#268d8d', // Lam
+    '#987338', // Cam
+    '#b936b9', // Tím
+];
+const textColors = [
+    '#ffffff', // Đỏ
+    '#b00000', // Đỏ
+    '#00be00', // Xanh lá cây
+    '#00009d', // Xanh dương
+    '#777700', // Vàng
+    '#ff00ff', // Hồng
+    '#00ffff', // Lam
+    '#ff1b1b', // Cam
+    '#ff00ff', // Tím
+];
+// Import tất cả biểu tượng từ thư viện Solid của Font Awesome
+library.add(fas);
+
+
+
 
 const SettingComponent = ({text}) => {
-    // Import tất cả biểu tượng từ thư viện Solid của Font Awesome
-    library.add(fas);
+
     const [isMenuHidden, setMenuHidden] = useState(true);
     const [isAudioHidden, setAudioHidden] = useState(false);
     const [isDisplayHidden, setDisplayHidden] = useState(true);
@@ -23,7 +52,6 @@ const SettingComponent = ({text}) => {
     const toggleDiv = () => {
         setMenuHidden(!isMenuHidden);
     };
-
     const hiddenDisplay = () => {
         setAudioHidden(false);
         setDisplayHidden(true);
@@ -32,18 +60,6 @@ const SettingComponent = ({text}) => {
         setAudioHidden(true);
         setDisplayHidden(false);
     };
-    // const applay_audioParameter = () => {
-    //     setStart(false);
-    //     setPause(false);
-    //     setPitch(pitchRangeRef.current.value);
-    //     setRate(rateRangeRef.current.value);
-    //     setVolume(volumeRangeRef.current.value);
-    //     setStart(false);
-    //     // eslint-disable-next-line no-undef
-    //     responsiveVoice.pause();
-    //     setPause(true);
-    // };
-
 
     useEffect(() => {
         // Lấy giá trị mặc định từ localStorage (nếu có)
@@ -114,6 +130,32 @@ const SettingComponent = ({text}) => {
         }
     };
 
+    /*-------------------------------------------------------------------------------*/
+
+    const Square = ({ color, onClick }) => {
+        return (
+            <div className= 'color_box'
+                style={{
+                    backgroundColor: color,
+                }}
+                onClick={onClick}
+            ></div>
+        );
+    };
+    const {setBackgroundColor, setTextColor} = useContext(MyContext);
+
+
+    // Hàm này được gọi khi người dùng bấm vào một ô
+    const selectedBackgroundColor = (color) => {
+        setBackgroundColor(color);
+        localStorage.setItem('backgroundColor', color);
+
+    };
+    const selectedTextColor = (color) => {
+        setTextColor(color);
+        localStorage.setItem('textColor', color)
+    };
+
 
     return (
         <div className="setting">
@@ -145,19 +187,43 @@ const SettingComponent = ({text}) => {
                             <span>{volume}</span> {/* Hiển thị giá trị volume */}
                         </div>
                     </div>
-                    {/*<div style={{textAlign: 'left'}}>*/}
-                    {/*    <button style={{ padding: '5px 10px', borderRadius: '5px' }} onClick={applay_audioParameter}>*/}
-                    {/*        Áp dụng*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
                     <button id="start" onClick={playAudio}>
                         <FontAwesomeIcon icon="fas fa-pause" className={isPause ? 'hidden':'myicon'} />
                         <FontAwesomeIcon icon="fas fa-play" style={{marginLeft: '6px'}} className={isPause ? 'myicon' : 'hidden'}/>
                     </button>
                 </div>
 
-                <div id="setting_display" className={isDisplayHidden ? 'setting_panel hidden' : 'setting_panel'}>
-                    <p style={{ fontSize: '30px' }}>display</p>
+                <div id="setting_display" className={isDisplayHidden ? 'setting_panel hidden' : 'setting_panel'} style={{padding: '10px'}}>
+                    <div>
+                        <div className='labelPanel_color'>Chọn màu nền</div>
+                        <div className='panel_color'>
+                            {backgroundColors.map((color, index) => (
+                                <Square
+                                    key={index}
+                                    color={color}
+                                    onClick={() => selectedBackgroundColor(color)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <div className='labelPanel_color' >Chọn màu chữ</div>
+                        <div className="panel_color">
+                            {textColors.map((color, index) => (
+                                <Square
+                                    key={index}
+                                    color={color}
+                                    onClick={() => selectedTextColor(color)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+
+
+
+
+
                 </div>
             </div>
 

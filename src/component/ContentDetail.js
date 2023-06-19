@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
 import SettingMenu from "./SettingMenu";
 import {FaHeart} from 'react-icons/fa';
+import {MyContext} from "./Detail";
+
 
 const ContentDetail = ({url}) => {
     const [articleTitle, setArticleTitle] = useState('');
@@ -98,8 +100,9 @@ const ContentDetail = ({url}) => {
         setIsFavorite(!isFavorite);
     };
 
+    const {backgroundColor, textColor} = useContext(MyContext);
     return (
-        <div>
+        <div style={{backgroundColor: backgroundColor,color: textColor ,padding: '20px'}}>
             <button onClick={handleFavoriteClick}>
                 {isFavorite ? <FaHeart color="red" size={56}/> : <FaHeart size={56}/>}
             </button>
