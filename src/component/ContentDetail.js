@@ -19,9 +19,9 @@ const ContentDetail = ({url}) => {
             const favArticles = JSON.parse(localStorage.getItem('favorites') || '[]');
             let viewedArticles = JSON.parse(localStorage.getItem('viewed') || '[]');
 
-            setIsFavorite(favArticles.includes(url));
-
             const urlNoProxy = url.replace("https://api.codetabs.com/v1/proxy?quest=", "");
+            setIsFavorite(favArticles.includes(urlNoProxy));
+
             if (!viewedArticles.includes(urlNoProxy)) {
                 viewedArticles.push(urlNoProxy);
                 localStorage.setItem('viewed', JSON.stringify(viewedArticles));
