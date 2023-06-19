@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
+import SettingMenu from "./SettingMenu";
+
 
 const ContentDetail = ({url}) => {
     const [articleTitle, setArticleTitle] = useState('');
     const [articleDescription, setArticleDescription] = useState('');
     const [articleContent, setArticleContent] = useState('');
     const [publishDate, setPublishDate] = useState('');
+    const [audio_text, setAudioText] = useState('');
 
     useEffect(() => {
         const getContent = async () => {
@@ -27,9 +30,24 @@ const ContentDetail = ({url}) => {
                 // Lấy nội dung của bài viết
                 let content = $('.detail-content').html();
 
+
+                // Lọc nội dung của các thẻ p và h2 là con trực tiếp của thẻ gốc
+                let container = document.createElement('div');
+                container.innerHTML = content;
+                let filteredContent = [];
+                Array.from(container.childNodes).forEach((child) => {
+                    if (child.tagName === 'P' || child.tagName === 'H2') {
+                        filteredContent.push(child.textContent);
+                    }
+                });
+                let contentText = filteredContent.join('\n');
+
                 // Lấy ngày xuất bản của bài viết
                 const publishDate = $('[data-role="publishdate"]').text().trim();
                 setPublishDate(formatPubDate(publishDate));
+
+                // Lấy nội dung sử dụng cho báo nói (tiêu đề, mô tả, nội dung)
+                setAudioText(title + "\n" + description + "\n" + contentText);
 
                 // Convert link thẻ a của báo tuổi trẻ về link web hiện tại
                 const content$ = cheerio.load(content);
@@ -81,6 +99,7 @@ const ContentDetail = ({url}) => {
                     <div>Đang tải nội dung...</div>
                 )}
             </div>
+            <SettingMenu text = {audio_text}/>
         </div>
     );
 };

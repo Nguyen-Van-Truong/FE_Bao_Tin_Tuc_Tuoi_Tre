@@ -27,7 +27,7 @@ const Detail = () => {
 
             <div className="container main-news">
                 <div className="row">
-                    <div className="col-8">
+                    <div className="col-12">
                         <div className="story mt-4">
                             <ContentDetail url={url} />
                         </div>
@@ -36,9 +36,9 @@ const Detail = () => {
                         <CategoryRow items={worldItems} title="Phổ biến" />
                     </div>
                     {/*trending*/}
-                    <div className="col-4">
-                        <Trending items={educationItems.slice(0, 5)} />
-                    </div>
+                    {/*<div className="col-4">*/}
+                    {/*    <Trending items={educationItems.slice(0, 5)} />*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </div>
