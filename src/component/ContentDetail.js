@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import {formatPubDate} from "./NewsFeed";
 import SettingMenu from "./SettingMenu";
+import {MyContext} from "./Detail";
 
 
 const ContentDetail = ({url}) => {
@@ -71,8 +72,9 @@ const ContentDetail = ({url}) => {
         getContent();
     }, [url]);
 
+    const {backgroundColor, textColor} = useContext(MyContext);
     return (
-        <div>
+        <div style={{backgroundColor: backgroundColor,color: textColor ,padding: '20px'}}>
             <h1 style={{
                 fontSize: '36px',
             }}>{articleTitle}</h1>
