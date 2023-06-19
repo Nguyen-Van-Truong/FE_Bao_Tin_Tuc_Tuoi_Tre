@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Header from "./Header";
 import axios from 'axios';
 import cheerio from 'cheerio';
+import { FaTrash } from 'react-icons/fa';
 
 const ViewedArticles = () => {
-    const [viewedArticles, setViewedArticles] = useState([]);
-
+    const [viewedArticles, setViewedArticles] = useState(() => {
+        const savedViewedArticles = localStorage.getItem('viewed');
+        return savedViewedArticles ? JSON.parse(savedViewedArticles) : [];
+    });
     useEffect(() => {
         const articles = JSON.parse(localStorage.getItem('viewed') || '[]').reverse();
         const fetchedArticles = articles.map(async (url) => {
@@ -30,12 +33,24 @@ const ViewedArticles = () => {
         Promise.all(fetchedArticles).then(setViewedArticles);
     }, []);
 
+    const clearViewedArticles = () => {
+        localStorage.removeItem('viewed');
+        setViewedArticles([]);
+    };
+
     return (
         <div>
             <Header />
 
+
             <div className="container main-news">
                 <div className="row">
+                    <div className="clear-viewed-container" style={{textAlign: "right"}}>
+                        <button onClick={clearViewedArticles}>
+                            <FaTrash size={20} />
+                            Xóa hết
+                        </button>
+                    </div>
                     <div className="col-12">
                         <div className="mb-4 mt-4 section">
                             <div className="section-title">
