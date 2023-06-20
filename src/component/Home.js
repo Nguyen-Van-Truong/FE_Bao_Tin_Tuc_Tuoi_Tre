@@ -151,6 +151,9 @@ function Home() {
                                             </h5>
                                             <small>{item.pubDate}</small>
                                             <p className="summary pt-3">{item.description}</p>
+                                            <button onClick={() => handleFavoriteClick(item.link)}>
+                                                {favorites.includes(item.link) ? <FaHeart color="red" size={20}/> : <FaHeart size={20}/>}
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
